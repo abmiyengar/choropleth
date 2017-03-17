@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>H590 Project2</title>
+	<!-- Below tag lines to have responsive page based on bootstrap -->
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<!-- D3 related javascripts -->
+	<script src="scripts/d3.min.js" charset="utf-8"></script>
+	<script src="scripts/d3.tip.js" charset="utf-8"></script>
+	<script src="scripts/topojson.v1.js" charset="utf-8"></script>
+	<script src="scripts/basic.js" charset="utf-8"></script>
+	<script src="scripts/data.js" charset="utf-8"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.13.0/d3-legend.js"></script>
+	<script src="http://d3js.org/queue.v1.min.js"></script>
+	
+	<!-- styling related sources -->
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="css/index.css">
+	<link rel="stylesheet" type="text/css" href="css/d3.css">
+</head>
+<body onload="firstTabFunc(event)">
+<nav>
+	<div class="navLeft">
+		<span>H590 Project Two - Census Reporter</span>
+	</div>
+
+	<div class="navRight">
+		<ul>
+			<li><a href="#">HOME</a></li>
+			<li><a href="#">COMPARISON</a></li>
+			<li><a href="documentation.html">DOCUMENTATION</a></li>
+			<li><a href="#">DEMO</a></li>
+		</ul>
+	</div>
+</nav>
+
+<div class="content">
+	<section>
+		<div class="left">
+			<div class="dataDes"></div>
+			<h2>Lorem Ipsum</h2>
+			<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting.</p>
+			<div class="SelectBar">
+				<p>First Variable</p>
+				<select class="form-control">
+					<option value="" selected></option>
+					<option value="#">Total Population Within The Locality</option>
+					<option value="#">Age Distribution Broken Down By Sex</option>
+					<option value="#">Median age by sex</option>
+					<option value="#">Race</option>
+					<option value="#">Living arrangement for adults (18 years and over)</option>
+					<option value="#">Place of birth by nativity</option>
+					<option value="#">Median household income</option>
+					<option value="#">Per capita income</option>
+					<option value="#">Income to poverty-level ratio</option>
+					<option value="#">Poverty level by place of birth</option>
+					<option value="#">Educational attainment by place of birth</option>
+					<option value="#" >Travel time to work</option>
+					<option value="#" >Means of transportation to work</option>
+				</select>
+			</div>
+
+			<div class="SelectBar">
+				<p>Second Variable</p>
+				<select class="form-control">
+					<option value="" selected></option>
+					<option value="#">Race</option>
+					<option value="#">Age range</option>
+					<option value="#">Sex</option>
+					<option value="#">Place of birth</option>
+					<option value="#">Income</option>
+				</select>
+			</div>
+
+			<div class='my-legend'>
+				<div class='legend-title'><p>Legend</p></div>
+				<div class='legend-scale'>
+					<ul class='legend-labels'>
+						<li><span style='background:#F1EEF6;'></span>0 - 20%</li>
+						<li><span style='background:#BDC9E1;'></span>40%</li>
+						<li><span style='background:#74A9CF;'></span>60%</li>
+						<li><span style='background:#2B8CBE;'></span>80%</li>
+						<li><span style='background:#045A8D;'></span>100%</li>
+					</ul>
+				</div>
+				<div class='legend-source'>Source: <a href="http://colorbrewer2.org/">Color Brewer</a></div>
+		    </div>
+		</div>
+
+	<div class="tabcontent" id="first" style="overflow-x:auto;">
+	<table border="0">
+		<tr>
+			<td style="padding-left: 60px;">
+				<label style="font-size: 15px;">Variable: </label>
+			</td>
+			<td style="padding-left: 10px;">
+				<select class="form-control" id="variable1Type"></select>
+			</td>
+			<td style="padding-left: 60px;">
+				<input type="radio" id="state" name="region" value="state" checked="checked">
+			</td>
+			<td style="padding-left: 10px;">
+				<label>State</label>
+			</td>
+			<td style="padding-left: 20px;">
+				<input type="radio" id="county" name="region" value="county">
+			</td>
+			<td style="padding-left: 10px;">
+				<label>County</label>
+			</td>
+			<td style="padding-left: 60px;">
+				<label id="secVarLabel" style="font-size: 15px; ">Variable2: </label>
+			</td>
+			<td style="padding-left: 10px;">
+				<select id="variable2Type" class="form-control" ></select>
+			</td>
+		</tr>
+	</table>
+	<table border="0">
+		<tr>
+			<td id="map" style="padding-right: 50px;">
+			</td>
+			<td id="mapLegend" align="right" >
+			</td>
+		</tr>
+	</table>
+	<table align="center" border="1">
+		<tr>
+			<!-- Change the below dimensions chaining accordingly to image resolution to fit within the cell -->
+			<td id="chartArea" style="width: 900px; height: 305px;">
+					<table border="1">
+						<tr>
+							<td align="center" style="padding-left: 20px;">
+								<h5 id="chartHeading" ></h5>
+							</td>
+						</tr>
+					<table>
+					<table border="1">
+					<tr>
+						<td style="width: 150px; padding-left: 10px;">
+							<p id="totalName"></p>
+							<code id="totalValue"></code>
+						</td>
+						<td id="tinyPie" align="left" style="width: 250px; padding-left: 20px;">
+						</td>
+						<td id="pieLegend" align="right" >
+						</td>
+						<td id="barChart" style="padding-left: 20px;" align="center" >
+						</td>
+					</tr>	
+					</table>
+			</td>
+		</tr>
+	</table>
+	</div>
+
+	<script>
+
+	//############### first tab content ##################
+	//svg width and height
+	var width = 1200,
+		height = 500;
+		active = d3.select(null);
+		
+	var svg = d3.select("#map")
+				.append("svg")
+				.attr("width", width)
+				.attr("height", height);
+			
+	//determine what type of map projection - scale: dimensions of projected map
+	var projection = d3.geoAlbersUsa()
+		.scale(900);
+
+	//attach the projection to the map	
+	//project the specified point from the sphere to the plane  - 2D from 3D
+	var path = d3.geoPath()
+				.projection(projection);
+	//############### first tab content ##################
+
+	</script>	
+	</section>
+
+	<section>
+    </section>
+
+	<section>
+	</section>
+
+</div>
+
+<footer>
+	<div class="copyRight">
+		<p>Copyright &copy; 2016 Team</p>
+		<p>All Rights Reserved.</p>
+	</div>
+</footer>
+
+</body>
+
+
+</html>

@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html>
+<!-- Date: 08 Oct 2016 THINK SIMPLE | Authors: Shanglei Zhang, Abhishek, Alita, Pruthviraj Narayanaswamy -->
+<head>
+	<title>H590 Project2</title>
+	<!-- Below tag lines to have responsive page based on bootstrap -->
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<!-- D3 related javascripts -->
+	<script src="scripts/d3.min.js" charset="utf-8"></script>
+	<script src="scripts/d3.tip.js" charset="utf-8"></script>
+	<script src="scripts/topojson.v1.js" charset="utf-8"></script>
+	<script src="scripts/zero.js" charset="utf-8"></script>
+	<script src="scripts/basic.js" charset="utf-8"></script>
+	<script src="scripts/order.js" charset="utf-8"></script>
+	<script src="scripts/trends.js" charset="utf-8"></script>
+	<script src="scripts/chord.js" charset="utf-8"></script>
+	<script src="scripts/small.js" charset="utf-8"></script>
+	<script src="scripts/data.js" charset="utf-8"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.13.0/d3-legend.js"></script>
+	<script src="http://d3js.org/queue.v1.min.js"></script>
+	
+	<!-- styling related sources -->
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="css/index.css">
+	<link rel="stylesheet" type="text/css" href="css/d3.css">
+
+</head>
+
+<body onload="zeroTabFunc(event)">
+
+	<div class="background-header">
+	</div>
+
+	<ul class="navbar nav nav-pills" style="position: absolute; left: 50px; top: 20px;">
+	  <li><a href="#" class="tablinks" onclick="firstTabFunc(event)">Choropleth</a></li>
+	  <li><a href="#" class="tablinks" onclick="secondTabFunc(event)">Sort Data</a></li>
+	  <li><a href="small.html" class="tablinks" >Small Multiple Maps</a></li>
+	  <li><a href="#" class="tablinks" onclick="thirdTabFunc(event)">Trends with Scatter Plot</a></li>
+	  <!--<li><a href="#" class="tablinks" onclick="fourthTabFunc(event)">Chord Chart</a></li>-->
+	  <li><a href="documentation.html" class="tablinks" onclick="fifthTabFunc(event)">Documentation</a></li>
+	  <li><a href="#" class="tablinks" onclick="sixthTabFunc(event)">Video</a></li>
+	</ul>
+	<div class="container">
+	<div class="tabcontent" id="zero" style="overflow-x:auto;" style="position: absolute; left: 50px; top: 20px;">
+			<h1> Interactive Visual Analytics H590 </h1>
+		<p> 
+			For this project we have used 2015 American Community Survey (ACS) as our primary dataset. The ACS dataset is annually compiled by the US Census, and designed to provide broad demographic and socio-economic characteristics of the US population.<br></p>
+			<p>	This project aims to visualize 13 variables of population and census data using a combination of choropleths, bar charts, pie charts, scatterplots and multiple maps. We have provided users with the ability to view the variable distribution of all states or the ability to select a state and obtain detailed information of different variables for each state. Our analysis has provided the following insights. The native population is highest in southern states such as New Mexico, Texas, Oklahoma & Arizona. A quick google search revealed that the region of Oklahoma had settled occupation that dates back to a previous time in history. This can be attributed to high number of natives in this region. Hopefully by using this visualization you can help us gather further insights into the data.  </p>
+	<a href="index.html#first" class="tablinks" onclick="firstTabFunc(event)">Start Here</a>
+
+		<h4>MEET WITH OUR TEAM</h4>
+
+			<div class="team ">
+				<div class="member">
+					<img src="images/raj.jpg"/>
+					<span><strong>Pruthviraj NARAYANASWAMY</strong></span>
+					<span>Interaction Designer</span>
+					<span>pruthvi.raj@hotmail.com</span>
+				</div>
+
+				<div class="member">
+					<img src="images/ab.jpg"/>
+					<span><strong>Abhishek MURALI</strong></span>
+					<span>User Experience Designer</span>
+					<span>abmurali@iu.edu</span>
+				</div>
+
+				<div class="member">
+					<img src="images/sl.jpg"/>
+					<span><strong>Shanglei ZHANG</strong></span>
+					<span>Visual Designer</span>
+					<span>sz27@iu.edu</span>
+				</div>
+
+				<div class="member">
+					<img src="images/alita.jpg"/>
+					<span><strong>Alita PINTO</strong></span>
+					<span>Interaction Designer</span>
+					<span>alpinto@iupui.edu</span>
+				</div>
+			</div>
+</div>
+
+</div>
+
+	<div class="tabcontent" id="first" style="overflow-x:auto;">
+		<table border="1" bordercolor="#cccccc" style="position: absolute; left: 450px; top: 180px;">
+		<tr>
+		<td align="center" id="box1"><p>Click on any state to zoom into the
+	choropleth and explore the variable details for the specific state. To restore back click on the same state which was clicked. </p>
+		</td>
+		</tr>
+	</table>
+	<table border="0">
+		<tr>
+			<td style="padding-left: 60px;">
+				<label style="font-size: 15px;">Census Data: </label>
+			</td>
+			<td style="padding-left: 10px;">
+				<select class="form-control" id="variable1Type"></select>
+			</td>
+			<td style="padding-left: 60px;">
+				<input type="radio" id="state" name="region" value="state" checked="checked">
+			</td>
+			<td style="padding-left: 10px;">
+				<label>State</label>
+			</td>
+			<td style="padding-left: 20px;">
+				<input type="radio" id="county" name="region" value="county">
+			</td>
+			<td style="padding-left: 10px;">
+				<label>County</label>
+			</td>
+			<td style="padding-left: 60px;">
+				<label id="secVarLabel" style="font-size: 15px; ">Variable2: </label>
+			</td>
+			<td style="padding-left: 10px;">
+				<select id="variable2Type" class="form-control" ></select>
+			</td>
+		</tr>
+	</table>
+	<table border="0">
+		<tr>
+			<td id="map" style="padding-top: 20px; padding-left: 20px; padding-right: 30px;">
+			</td>
+			<td id="mapLegend" align="right" >
+			</td>
+		</tr>
+	</table>
+<table align="center" border="0" bordercolor="#BFC9CA" >
+		<tr>
+			<h1 id="totalName"></h1>
+			<!-- Change the below dimensions chaining accordingly to image resolution to fit within the cell -->
+			<td id="chartArea" style="width: 900px; height: 305px;" align="left" >
+					<table border="0">
+						<tr>
+
+							<td align="left" >
+								<!--<h3> Total Population</h3> -->
+								<h1 id="chartHeading" ></h1>  <h1 id="totalValue"></h1> 
+									<!--<h1 id="totalVal" ></h1> -->
+							</td>	
+						</tr>
+					<table>
+					<table border="0">
+					<tr>
+						<p align="justify">The below chart shows the total value in percentages. Total refers to the total percentage population for the United States as compared to the selected state. This proportion is represented using a Pie Chart.  </p><br> 
+						<td align="center" ><h1 id="chartHeading" ></h1><h4> Charts <br></h4><p>(Click/Hover over <br>charts for more information) </p>
+						</td>
+						<td id="tinyPie" align="center" style="width: 400px; padding-left: 20px;">
+						</td>
+						<td id="pieLegend" align="center" >
+						</td>
+						<td style="width: 150px; padding-left: 10px;">
+							<p style="padding-top: 20px;" id="totalName"></p>
+							<p style="padding-top: 10px;" id="itemValue"></p>
+							<p style="padding-top: 10px;" id="itemName"></p>
+							
+						</td>
+					</tr>	
+					</table>
+			</td>
+
+		</tr>
+		<tr>
+			<td align="left" > <br><br>
+				<div id="barChart" style="display:inline-block;width: 1000px; height: 250px; padding-top: 40px;">
+							</div>
+						</td>
+					</tr>	
+	</table>
+	</div>
+
+	<!-- this is second tab content -->
+
+	<div class="tabcontent" id="second" style="overflow-x:auto;" style="padding-top: 20px; padding-left: 20px; padding-right: 30px;">
+	<table border="0">
+		<tr >
+				
+			<td style="padding-top: 20px; padding-left: 20px; padding-right: 30px;"> <h4> Choropleth map of the population for United States </h4>
+				<p>Click Sort to order the total population for all states. California, closely followed by Texas are states with the highest population.</p> </td>
+			<td><button id="sortButton" style="position: relative; left: 300px; " type="button" class="btn btn-primary">Sort</button>
+				<button id="resetButton" style="position: relative; left: 300px; " type="button" class="btn btn-primary">Reset</button>
+			</td>	
+				
+		<tr>
+			<td id="map1" style="padding-left: 20px; padding-right: 20px;">
+			
+		
+			</td>
+			<td style="padding-left: 10px;padding-right: 10px;" align="center" >
+				<div id="barChart1">
+				</div>
+			</td>
+		</tr>
+	</table>
+	</div>
+	
+	<!-- this is third tab content -->
+	<div class="tabcontent" id="third" style="overflow-x:auto;">
+	<table border="0">
+		<tr>
+			<td style="padding-left: 10px;padding-right: 10px;" align="center" >
+				<div id="scatterPlot">
+				</div>
+		<!--	</td>
+			<td id="map2" style="padding-left: 20px; padding-right: 20px;">
+
+			</td>-->
+			<td style="padding-left: 30px;padding-right: 30px; border: 1px"  >
+			<div id="container">
+					<h1> Trend Analysis with a Scatter Plot </h1>
+					<h5> Circles sizes range from 6 to 25 </h5>
+					<p align="justify"> The scatter plot showcases a linear relationship between the median household income and per capita income. It also showcases the educational attainment in each state. It is interesting to note District of columbia has the highest median household income and per capita income but a very low educational attainment. It represents the educational attainment for each state. </p>
+				</div>
+			</td>
+		</tr>
+	</table>
+	</div>
+
+	<!-- this is fourth tab content -->
+	<div class="tabcontent" id="fourth" style="overflow-x:auto;">
+	<table border="0">
+		<tr>
+			<td style="padding-left: 10px;padding-right: 10px;" align="center" >
+				<div id="chordChart">
+				</div>
+			</td>
+			<td id="map3" style="padding-left: 20px; padding-right: 20px;">
+
+			</td>
+		</tr>
+	</table>
+	</div>
+
+	       <div class="tabcontent" id="sixth" style="overflow-x:auto;">
+
+	
+
+
+<div class="container">
+       	<a href="https://www.youtube.com/watch?v=iXsUi8Cft6g&feature=youtu.be">External Video Link</a><br><br>
+       </div>
+</div>
+	
+	<script>
+	
+	
+
+	//############### first tab content ##################
+	//svg width and height
+	var width = 1200,
+		height = 500;
+		active = d3.select(null);
+		
+	var svg = d3.select("#map")
+				.append("svg")
+				.attr("width", width)
+				.attr("height", height);
+			
+	//determine what type of map projection - scale: dimensions of projected map
+	var projection = d3.geoAlbersUsa()
+		.scale(900);
+
+	//attach the projection to the map	
+	//project the specified point from the sphere to the plane  - 2D from 3D
+	var path = d3.geoPath()
+				.projection(projection);
+	//############### first tab content ##################
+
+	//############### second tab content ##################
+	//svg width and height
+	var width1 = 500,
+		height1 = 500;
+		active = d3.select(null);
+		
+	var svg1 = d3.select("#map1")
+				.append("svg")
+				.attr("width", width1)
+				.attr("height", height1);
+			
+	//determine what type of map projection - scale: dimensions of projected map
+	var projection1 = d3.geoAlbersUsa()
+		.scale(700);
+
+	//attach the projection to the map	
+	//project the specified point from the sphere to the plane  - 2D from 3D
+	var path1 = d3.geoPath()
+				.projection(projection1);
+	//############### second tab content ##################
+	
+	//############### third tab content ##################
+	//svg width and height
+	var width2 = 400,
+		height2 = 500;
+		
+	var svg2 = d3.select("#map2")
+				.append("svg")
+				.attr("width", width2)
+				.attr("height", height2);
+			
+	//determine what type of map projection - scale: dimensions of projected map
+	var projection2 = d3.geoAlbersUsa()
+				.scale(300);
+
+	//attach the projection to the map	
+	//project the specified point from the sphere to the plane  - 2D from 3D
+	var path2 = d3.geoPath()
+				.projection(projection2);
+	//############### second tab content ##################
+	
+	//############### third tab content ##################
+	//svg width and height
+	var width3 = 400,
+		height3 = 500;
+		
+	var svg3 = d3.select("#map3")
+				.append("svg")
+				.attr("width", width3)
+				.attr("height", height3);
+			
+	//determine what type of map projection - scale: dimensions of projected map
+	var projection3 = d3.geoAlbersUsa()
+				.scale(300);
+
+	//attach the projection to the map	
+	//project the specified point from the sphere to the plane  - 2D from 3D
+	var path3 = d3.geoPath()
+				.projection(projection3);
+	//############### second tab content ##################
+	
+	</script>			
+
+</body>
+</html>

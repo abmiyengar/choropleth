@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<!-- Date: 08 Oct 2016 THINK SIMPLE | Authors: Shanglei Zhang, Abhishek, Alita, Pruthviraj Narayanaswamy -->
+<head>
+	<title>H590 Project2</title>
+	<!-- Below tag lines to have responsive page based on bootstrap -->
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<!-- D3 related javascripts -->
+	<script src="scripts/d3.min.js" charset="utf-8"></script>
+	<script src="scripts/d3.tip.js" charset="utf-8"></script>
+	<script src="scripts/topojson.v1.js" charset="utf-8"></script>
+	<script src="scripts/basic.js" charset="utf-8"></script>
+	<script src="scripts/small.js" charset="utf-8"></script>
+	<script src="scripts/order.js" charset="utf-8"></script>
+	<script src="scripts/trends.js" charset="utf-8"></script>
+	<script src="scripts/data.js" charset="utf-8"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.13.0/d3-legend.js"></script>
+	<script src="http://d3js.org/queue.v1.min.js"></script>
+	
+	<!-- styling related sources -->
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="css/index.css">
+	<link rel="stylesheet" type="text/css" href="css/d3.css">
+</head>
+
+
+<body >
+
+<div class="background-header">
+	</div>
+
+	<ul class="navbar nav nav-pills" style="position: absolute; left: 50px; top: 20px;">
+	  <li><a href="index.html#first" class="tablinks" onclick="firstTabFunc(event)">Choropleth</a></li>
+	  <li><a href="index.html#second" class="tablinks" onclick="secondTabFunc(event)">Sort Data</a></li>
+	  <li><a href="small.html" class="tablinks" >Small Multiple Maps</a></li>
+	  <li><a href="index.html#third" class="tablinks" onclick="thirdTabFunc(event)">Trends with Scatter Plot</a></li>
+	  <!--<li><a href="index.html#fourth" class="tablinks" onclick="fourthTabFunc(event)">Chord Chart</a></li> -->
+	  <li><a href="#" class="tablinks" onclick="fifthTabFunc(event)">Documentation</a></li>
+	  <li><a href="index.html#sixth" class="tablinks" onclick="sixthTabFunc(event)">Video</a></li>
+	</ul>
+
+<div class="container">
+
+		<h2>PROJECT DESCRIPTION</h2>
+		
+			<p align="left">
+
+		This project aims to visualize 13 variables of population and census data using a combination of choropleths, bar charts, pie charts, scatterplots and multiple maps. We have provided users with the ability to view the variable distribution of all states or the ability to select a state and obtain detailed information of different variables for each state. Our analysis has provided the following insights. The native population is highest in southern states such as New Mexico, Texas, Oklahoma & Arizona. A quick google search revealed that the region of Oklahoma had settled occupation that dates back to a previous time in history. This can be attributed to high number of natives in this region. Hopefully by using this visualization you can help us gather further insights into the data. 
+
+		<div class="blank"></div>
+
+		<h2>MEET WITH OUR TEAM</h2>
+
+			<div class="team design">
+				<div class="member">
+					<img src="images/raj.jpg"/>
+					<span><strong>Pruthviraj NARAYANASWAMY</strong></span>
+					<span>Interaction Designer</span>
+					<span>pruthvi.raj@hotmail.com</span>
+				</div>
+
+				<div class="member">
+					<img src="images/ab.jpg"/>
+					<span><strong>Abhishek MURALI</strong></span>
+					<span>User Experience Designer</span>
+					<span>abmurali@iu.edu</span>
+				</div>
+
+				<div class="member">
+					<img src="images/sl.jpg"/>
+					<span><strong>Shanglei ZHANG</strong></span>
+					<span>Visual Designer</span>
+					<span>sz27@iu.edu</span>
+				</div>
+
+				<div class="member">
+					<img src="images/alita.jpg"/>
+					<span><strong>Alita PINTO</strong></span>
+					<span>Interaction Designer</span>
+					<span>alpinto@iupui.edu</span>
+				</div>
+			</div>
+
+
+		<div class="blank"></div>
+
+
+		<h2>DESIGN PROCESS</h2>
+
+		<div class="container">
+
+			<h3><strong>Step 1 — Brainstorm. Brainstorm. Brainstorm.</strong></h3>
+			<p>Our first step was to define a clear objective - How will our visualization help users understand the data?
+				The data  visualized in this project is the 2015 American Census census information that includes demographic info, household income, living arrangement, education, means of transportation, travel time and so on. Sketching out the overall layout of the pages, identifying charts to best represent data was a great starting point. We used the cheat sheet, online resources and textbooks   to help identify the appropriate charts for the variables. For example, we represented the variable Race with a pie chart to show the diversity of ethnicity in any given state. This composition gave us insight into the division of each group as a simple share of the total population. We followed a similar process for the remaining variables.</p>
+
+			<div class="images">
+				<img src="images/4.jpg">
+				<img src="images/1.jpg">
+				<p><em>Fig 1. Sketches of our initial analysis of correlated variables and appropriate charts for visualization.</em></p>
+			</div>
+
+			<h3><strong>Step 2 — Sensemaking with Data</strong></h3>
+			<p>After we had brainstormed the overall plan, and identified the types of charts required for each variable, our initial sketches toyed with several navigation ideas. Sketching this initial page layout helped inform our final navigational flow. Plotting the choropleth map gave us a rough idea of the real estate available for placement of several other charts. We iterated heavily before jumping to code - starting with a selection bar for thirteen variables, radio buttons to switch between the “State” and “County”. These iterations helped us converge to a single selection bar with clearly labeled values. The rationale was that reduced number of choices minimized the cognitive load on the user. We picked a sequential color scheme from “Colorbrewer”, to represent the different value on the legend. These colors were carefully selected after ensuring it was W3C compliant. </p>
+
+			<div class="images">
+				<img src="images/9.jpg">
+				<p><em>Fig 2.  User had to scroll horizontally to get the details of age distribution broken down by sex.</em></p>
+			</div>
+
+			<h3><strong>Step 3 — Analyze trends </strong></h3>
+			<p>Building steadily from the previous stage, we gathered that age distribution broken down by sex when represented as a bar chart did not show the data meaningfully. For instance, the user had to scroll horizontally across the years to get the associated values. Following the design principle: overview first, zoom and filter and details on demand, we decided to place the bar chart below the pie chart. This simple change in visualization allowed the user to view the entire data for the given variable at a glance.
+			</p>
+			<div class="images">
+				<img src="images/8.jpg">
+				<p><em>Fig 3. User had to scroll horizontally to get the details of age distribution broken down by sex.</em></p>
+				<img src="images/7.jpg">
+				<p><em>Fig 4. Placing the bar chart below the pie chart allowed users to get info on age distribution broken down by sex at a glance.</em></p>
+			</div>
+
+			<p>In the process of data visualization, we understood the dataset deeper and figured out the collations between variables. We want to present more related information of each single variable. For instance, when one state is selected, the related demographic information would show in the same interface as also. Another idea is, we hope to provide a opportunity to let users compare the data of any two states they interested. So we developed the “COMPARISON” page. In this page, two choropleth maps layout side by side. We the user select states, the maps would zoom in and show the respective data below the maps. It would be an efficient way for the users to compare the data of different states.</p>
+
+			<div class="images">
+				<img src="images/2.jpg">
+				<p><em>Fig 5. Sketches of our processing analysis of correlated variables and appropriate charts for visualization.</em></p>
+			</div>
+
+			<h3><strong>Step 4 — Iterate. Iterate. Iterate. </strong></h3>
+			<p>After the initial coding of the project was complete, we iterated upon the designs on every element on the UI.  With each iteration, we learned more about the correlation between the data. Armed with this new knowledge, we refined our designs still further to finally come up with our present day version version.</p>
+
+			<h3><strong>Insights & Conclusion</strong></h3>
+			<p>The small multiple map showcased interesting trends present in the US census data. For instance, the native population is highest in southern states such as New Mexico, Texas, Oklahoma & Arizona. A quick google search revealed that the region of Oklahoma had settled occupation that dates back to a previous time in history. This may be attributed to one of the reasons the high number of natives living in Oklahoma.</p>
+
+			<p>Further analysis revealed the African American population - largest group in racial minority,  was concentrated more towards the southern states of  Georgia, Florida, Virginia. If we look to history, we find that slaves from Africa were brought to the southern states for work on plantations. It is clear from our data, that even though this group has migrated to other areas, majority of them still find themselves living in the southern states.</p>
+
+
+			<h3><strong>References</strong></h3>
+
+			<ul>
+				<li>https://github.com/d3/d3-queue</li>
+<li>https://runkit.com/npm/d3-queue</li>
+<li>http://www.opengeocode.org/tutorials/USCensusAPI.php</li>
+<li>http://bl.ocks.org/mbostock/4206573</li>
+<li>https://bl.ocks.org/mbostock/4090846</li>
+<li>https://bost.ocks.org/mike/map/</li>
+<li>http://stackoverflow.com/questions/12652849/creating-and-accessing-2-dimensional-arrays-in-javascript</li>
+<li>http://stackoverflow.com/questions/14028259/json-response-parsing-in-javascript-to-get-key-value-pair</li>
+<li>http://stackoverflow.com/questions/10086167/d3-how-to-deal-with-json-data-structures</li>
+<li>http://www.cartographicperspectives.org/index.php/journal/article/view/cp76-hunt/1312</li>
+<li>http://www.npr.org/censusmap/#4.00/44.19/-82.86</li>
+<li>http://www.nytimes.com/interactive/2012/08/24/us/drought-crops.html?_r=1&</li>
+</li></ul>
+		
+
+		</div>
+
+		<div> 
+
+	</section>
+
+<!--
+<footer>
+	<div class="copyRight">
+		<p>Copyright &copy; 2016 Team</p>
+		<p>All Rights Reserved.</p>
+	</div>
+</footer>
+-->
+
+</body>
+
+
+</html>

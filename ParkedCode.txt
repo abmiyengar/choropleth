@@ -1,0 +1,26 @@
+			if(!isNaN(val[i]))
+			{
+				max = max > val[i] ? max : val[i];
+				min = min < val[i] ? min : val[i];
+			}
+			
+			
+			//Binding or accessing the older tags in later stage
+			var paths = svg.append("g")
+				.attr("class", "counties")
+				.selectAll("path")
+				.data(topojson.feature(results[0], results[0].objects.counties).features)
+				.enter().append("path")
+				.attr("d", path);
+				
+			paths.attr("fill", function(d){ return "#ff8866";});
+			
+			
+			
+					var val = [];
+		
+		for(i = 1; i < results[2].length; i++)
+		{
+			//make sure to start from 0 index for val else trouble at min and max and later
+			val[i-1] = parseInt(results[2][i][1]);
+		}

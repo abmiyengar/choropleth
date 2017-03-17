@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<!-- Date: 08 Oct 2016 THINK SIMPLE | Authors: Shanglei Zhang, Abhishek, Alita, Pruthviraj Narayanaswamy -->
+<head>
+	<title>H590 Project2</title>
+	<!-- Below tag lines to have responsive page based on bootstrap -->
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<!-- D3 related javascripts -->
+	<script src="scripts/d3.min.js" charset="utf-8"></script>
+	<script src="scripts/d3.tip.js" charset="utf-8"></script>
+	<script src="scripts/topojson.v1.js" charset="utf-8"></script>
+	<script src="scripts/basic.js" charset="utf-8"></script>
+	<script src="scripts/small.js" charset="utf-8"></script>
+	<script src="scripts/order.js" charset="utf-8"></script>
+	<script src="scripts/trends.js" charset="utf-8"></script>
+	<script src="scripts/data.js" charset="utf-8"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.13.0/d3-legend.js"></script>
+	<script src="http://d3js.org/queue.v1.min.js"></script>
+	
+	<!-- styling related sources -->
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="css/index.css">
+	<link rel="stylesheet" type="text/css" href="css/d3.css">
+</head>
+
+
+<body onload="firstTabFunc(event)">
+
+<div class="background-header">
+	</div>
+
+	<ul class="navbar nav nav-pills" style="position: absolute; left: 50px; top: 20px;">
+	  <li><a href="index.html#first" class="tablinks" onclick="firstTabFunc(event)">Choropleth</a></li>
+	  <li><a href="index.html#second" class="tablinks" onclick="secondTabFunc(event)">Sort Data</a></li>
+	  <li><a href="small.html" class="tablinks" >Small Multiple Maps</a></li>
+	  <li><a href="index.html#third" class="tablinks" onclick="thirdTabFunc(event)">Trends with Scatter Plot</a></li>
+	  <li><a href="index.html#fourth" class="tablinks" onclick="fourthTabFunc(event)">Chord Chart</a></li>
+	  <li><a href="#" class="tablinks" onclick="fifthTabFunc(event)">Documentation</a></li>
+	  <li><a href="#" class="tablinks" onclick="sixthTabFunc(event)">Video</a></li>
+	</ul>
+
+
+<h5 style="position: relative; left: 50px; "> In the below maps we have analysed the total population across the following 8 categories. This comparison helps us identify the population clusters for specific variables across various states. </h5><br>
+	<table border="1" style="position: relative; left: 50px; " border-color="#e1e1e1">
+		<tr>
+			<td>
+				Total Population
+				<div id="chart1" ></div>
+			</td>
+			<td>
+				Male Population
+				<div id="chart2"></div>
+			</td>
+			<td >
+				Female Population
+				<div id="chart3"></div>
+			</td>
+			<td >
+				Median Age
+				<div id="chart8"></div>
+			</td>
+		</tr>
+		<tr>	
+			<td >
+				White Population
+				<div id="chart4"></div>
+			</td>
+			<td>
+				African American Population 
+				<div id="chart5"></div>
+			</td>
+			<td >
+				Asian Population
+				<div id="chart6"></div>
+			</td>
+			<td >
+				American Native
+				<div id="chart7"></div>
+			</td>
+		</tr>
+
+
+
+	</table>
+
+
+ <!--Total population within the locality --> 
+ <!--Age distribution broken down by sex -->
+ <!--Median age by sex -->
+ <!--Race -->
+ <!--Living arrangement for adults (18 years and over) -->
+ <!--Place of birth by nativity -->
+ <!--Median household income -->
+ <!--Per capita income -->
+
+</div>
+</div>
+
+<script>
+
+//############### first tab content ##################
+//svg width and height
+var width = 310,
+	height = 225;
+			
+//determine what type of map projection - scale: dimensions of projected map
+var projection = d3.geoAlbersUsa()
+	.scale(300)
+	.translate([width/2, height/2]);
+
+//attach the projection to the map	
+//project the specified point from the sphere to the plane  - 2D from 3D
+var path = d3.geoPath()
+			.projection(projection);
+//############### first tab content ##################
+
+var chart1 = d3.select("#chart1").append("svg")
+			.attr("width", width)
+			.attr("height", height);
+
+	
+	//get the response asynchronously
+showMapsm("B01003001",chart1);
+
+
+var chart2 = d3.select("#chart2").append("svg")
+			.attr("width", width)
+			.attr("height", height);
+
+showMapsm("B01001002",chart2); // Male Population
+
+
+
+var chart3 = d3.select("#chart3").append("svg")
+			.attr("width", width)
+			.attr("height", height);
+
+showMapsm("B01001026",chart3); // Female Population
+
+var chart4 = d3.select("#chart4").append("svg")
+			.attr("width", width)
+			.attr("height", height);
+
+showMapsm("B02001002",chart4); // White Population
+
+var chart5 = d3.select("#chart5").append("svg")
+			.attr("width", width)
+			.attr("height", height);
+
+showMapsm("B02001003",chart5); // Black Population
+
+var chart6 = d3.select("#chart6").append("svg")
+			.attr("width", width)
+			.attr("height", height);
+
+showMapsm("B02001005",chart6); // Asian Population
+
+var chart7 = d3.select("#chart7").append("svg")
+			.attr("width", width)
+			.attr("height", height);
+
+showMapsm("B02001004",chart7); // American Native
+
+var chart8 = d3.select("#chart8").append("svg")
+			.attr("width", width)
+			.attr("height", height);
+
+showMapsm("B01002001",chart8); // Lives Alone
+
+
+
+
+
+</script>
+
+
+</body>
+</html>

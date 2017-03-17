@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<!-- Date: 08 Oct 2016 THINK SIMPLE-->
+<head>
+	<title>H590 Project2</title>
+	<!-- Below tag lines to have responsive page based on bootstrap -->
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<!-- D3 related javascripts -->
+	<script src="scripts/d3.min.js" charset="utf-8"></script>
+	<script src="scripts/d3.tip.js" charset="utf-8"></script>
+	<script src="scripts/topojson.v1.js" charset="utf-8"></script>
+	<script src="http://d3js.org/queue.v1.min.js"></script>
+	
+	<!-- styling related sources -->
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+	
+	<style>
+		.counties {
+			  stroke: #fff;
+		}
+			
+		.states {
+			  stroke: #fff;
+			  stroke-linejoin: round;
+		}
+	</style>
+</head>
+
+<body>
+
+<script>
+
+//Fetches the dataset asynchronously and delivers the response
+//Input: Census data variable and division - state/county
+//Output: Responses obtained - HTTP
+function getData(variable, division){
+	key = "7adf8bfea67e27e5edcaa228acef5db5cb905303";
+	year = "2015";
+	
+}
+
+var width = 960,
+	height = 900;
+	
+var svg = d3.select("body").append("svg")
+			.attr("width", width)
+			.attr("height", height);
+	
+//determine what type of map projection 					--------------------------> scale value - 1280, check
+var projection = d3.geoAlbersUsa()
+    .scale(1280)
+    .translate([width / 2, height / 2]);
+	
+//attach the projection to the map	
+//project the specified point from the sphere to the plane  - 2D from 3D
+var path = d3.geoPath()
+			.projection(projection);
+
+var q = d3.queue()
+	.defer(d3.json, "data/us-10m.json")
+    .defer(d3.json, "http://api.census.gov/data/2015/acs1?get=NAME,B01003_001E&for=state:*&key=7adf8bfea67e27e5edcaa228acef5db5cb905303")
+    .defer(d3.json, "http://api.census.gov/data/2015/acs1?get=NAME,B01003_001E&for=county:*&key=7adf8bfea67e27e5edcaa228acef5db5cb905303")
+    .awaitAll(function(error, results) {
+		if (error) throw error;
+		//print the response of first request - states | second - counties
+		
+		console.log(results[0]);
+  
+		var val = [];
+		var countyId;
+		var valByCounty = d3.map();
+		var index = 1;
+		
+		for(i = 1; i < results[index].length; i++)
+		{
+			//make sure to start from 0 index for val else trouble at min and max and later
+			val[i-1] = parseInt(results[index][i][1]);
+			//make the key field using "state"+"county" value
+			countyId = parseInt(results[index][i][2] + results[index][i][3]);
+			console.log("county: "+results[index][i][0]+" ID: "+countyId);
+			valByCounty.set(countyId, parseInt(results[index][i][1]));
+		}
+		
+		console.log(valByCounty.get(53073));
+		console.log(topojson.feature(results[0], results[0].objects.counties).features.length);
+		console.log(results[0].objects.states);
+		
+		min = d3.min(val);	
+		max = d3.max(val);
+	
+		console.log("min : "+min);
+		console.log("max : "+max);
+		
+		var quantize = d3.scaleQuantize()
+			.domain([min, max])
+			.range(["#fee0d2", "#fcbba1", "#fc9272", "#fb6a4a",
+                "#ef3b2c", "#cb181d", "#a50f15", "#67000d"]);
+				
+			//modify states to counties to get for counties below
+			var paths = svg.append("g")
+				.attr("class", "states")
+				.selectAll("path")
+				.data(topojson.feature(results[0], results[0].objects.states).features)
+				.enter().append("path")
+				.attr("id", function(d) { return d.id; })
+				.attr("fill", function(d) { return quantize(valByCounty.get(d.id)); })
+				.attr("d", path);
+    });
+		
+</script>
+
+</body>
+</html>
